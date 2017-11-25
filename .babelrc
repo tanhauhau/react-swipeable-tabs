@@ -1,0 +1,26 @@
+{
+  "presets": [
+    "es2015",
+    ["env", {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ],
+    "react"],
+  "plugins": [
+    "transform-object-assign",
+    "babel-plugin-transform-object-rest-spread"
+  ],
+  "env": {
+    "production": {
+      "plugins": [
+        "transform-class-properties",
+        "transform-react-constant-elements",
+        "transform-dev-warning",
+        "transform-runtime",
+        ["transform-react-remove-prop-types", {"mode": "wrap"}]
+      ]
+    }
+  }
+}

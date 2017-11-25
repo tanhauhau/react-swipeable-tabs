@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "Region"
+  },
+  {
+    "id": 2,
+    "name": "U.S. Politics"
+  },
+  {
+    "id": 3,
+    "name": "China Politics"
+  },
+  {
+    "id": 4,
+    "name": "Money"
+  },
+  {
+    "id": 5,
+    "name": "Entertainment"
+  },
+  {
+    "id": 6,
+    "name": "Technology"
+  },
+  {
+    "id": 7,
+    "name": "Sport"
+  },
+  {
+    "id": 8,
+    "name": "Travel"
+  },
+  {
+    "id": 9,
+    "name": "Sport"
+  },
+  {
+    "id": 10,
+    "name": "Style"
+  },
+  {
+    "id": 11,
+    "name": "Health"
+  },
+  {
+    "id": 12,
+    "name": "Video"
+  },
+  {
+    "id": 13,
+    "name": "CryptoCurrency"
+  },
+  {
+    "id": 14,
+    "name": "Stocks"
+  },
+  {
+    "id": 15,
+    "name": "Business"
+  },
+  {
+    "id": 16,
+    "name": "VR"
+  },
+  {
+    "id": 17,
+    "name": "Markets"
+  },
+  {
+    "id": 18,
+    "name": "Arts"
+  },
+  {
+    "id": 19,
+    "name": "Design"
+  },
+  {
+    "id": 20,
+    "name": "Food"
+  }
+]

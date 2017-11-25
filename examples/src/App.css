@@ -1,0 +1,19 @@
+.App {
+  text-align: center;
+}
+
+.tab {
+  padding: 8px 13px;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.mode {
+  padding: 8px 13px;
+}
+
+.mode-selected {
+  background-color: orange;
+}
