@@ -5,27 +5,6 @@ import category from './fixture/category.json';
 
 const a = [1,2,3,4,5,6,7,8,9,10];
 
-function defaultInterpolate (from, to, t) {
-  return t === 0 ? from : t === 1 ? to : from + (to - from) * t;
-}
-
-const tabGuideInterpolation = {
-  translateX: function(from, to, t) {
-    if (t > 0.5) {
-      return to;
-    } else {
-      return from + (to - from) * (2 * t);
-    }
-  },
-  scaleX: function(from,to,t) {
-    if (t > 0.5) {
-      return to * (2 * t - 1);
-    } else {
-      return from * (1 - 2 * t);
-    }
-  }
-}
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -40,7 +19,7 @@ class App extends Component {
       <div className="App">
         <div>
           {[1,2,3].map(i => (
-            <span className={`mode ${i === this.state.mode ? 'mode-selected' : ''}`} onClick={() => this.setState({mode: i})}>
+            <span key={i} className={`mode ${i === this.state.mode ? 'mode-selected' : ''}`} onClick={() => this.setState({mode: i})}>
               {i}
             </span>
           ))}
@@ -50,7 +29,7 @@ class App extends Component {
           tabs={category}
           index={this.state.index}
           onChangeIndex={index => this.setState({index})}
-          tabGuideStyle={{ backgroundColor: 'red' }}
+          tabIndicatorStyle={{ backgroundColor: 'red' }}
           renderTab={(tab, index, selected) => (
             <div className={`tab ${selected?'tab-selected':''}`}>{tab.name}</div>
           )}

@@ -577,7 +577,7 @@ class SwipeableViews extends Component {
         (this.viewLength -
           parseInt(rootStyle.paddingLeft, 10) -
           parseInt(rootStyle.paddingRight, 10));
-      
+
       if (typeof this.props.onSwipeStart !== 'undefined') {
         this.props.onSwipeStart(this.startIndex);
       }
