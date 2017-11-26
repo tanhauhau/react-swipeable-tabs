@@ -23,21 +23,32 @@ export default class TabIndicator extends React.Component {
     if (!this._tabGuidRef) {
       return;
     }
-    if (mode === 'move') {
-      const translateX = linearInterpolate(from.left, to.left, t);
-      const scaleX = linearInterpolate(from.width, to.width, t);
-      this._transformIndicator('all 0s ease 0s', translateX, scaleX);
-    } else {
-      this._transformIndicator(this.context.snapTransition, to.left, to.width);
+    // at the edge
+    if (!from) {
+      from = { left: -to.width, width: to.width };
     }
+    if (!to) {
+      to = { left: from.width * 2 + from.left, width: from.width };
+    }
+    requestAnimationFrame(() => {
+      this._updateTransition(mode === 'move' ? 'all 0s ease 0s' : this.context.snapTransition);
+      if (mode === 'move') {
+        const translateX = linearInterpolate(from.left, to.left, t);
+        const scaleX = linearInterpolate(from.width, to.width, t);
+        this._transformIndicator(translateX, scaleX);
+      } else {
+        this._transformIndicator(to.left, to.width);
+      }
+    });
   }
 
-  _transformIndicator(transition, translateX, scaleX) {
+  _updateTransition(transition) {
+    domUtils.setTransition(this._tabGuidRef, transition);
+  }
+
+  _transformIndicator(translateX, scaleX) {
     const transform = `translate(${translateX}px, 0) scale(${scaleX},1)`;
-    requestAnimationFrame(() => {
-      domUtils.setTransition(this._tabGuidRef, transition);
-      domUtils.setTransform(this._tabGuidRef, transform);
-    });
+    domUtils.setTransform(this._tabGuidRef, transform);
   }
 
   render() {

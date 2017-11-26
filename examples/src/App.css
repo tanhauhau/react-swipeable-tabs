@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  padding-top: 22px;
 }
 
 .tab {
@@ -10,8 +11,21 @@
   display: none;
 }
 
+.mode-selector {
+  position: fixed;
+  height: 22px;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  z-index: 2;
+}
+
 .mode {
-  padding: 8px 13px;
+  padding: 0 13px;
+  display: inline-flex;
+  height: 22px;
+  align-items: center;
 }
 
 .mode-selected {

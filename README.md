@@ -2,7 +2,11 @@
 
 > Based on [react-swipeable-views](https://github.com/oliviertassinari/react-swipeable-views)
 
-
+## Customize Tab
+You can set a custom `tabComponent`.
+`tabComponent` should be created via `Tab` factory method:
+- `Tab.text(toString: (data) => string, { sync: (ref, t, mode) => void , ...otherProps })`
+- `Tab.custom(renderTab: (data) => node, sync: (ref, t, mode) => void)`
 
 ## Customize Tab Indicator
 There are two ways to to customize the tabIndicator: `tabIndicatorComponent` and `tabIndicatorStyle`.

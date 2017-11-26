@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 export default class TabContent extends React.Component {
   static propTypes = {
-    show: PropTypes.bool,
     renderTabContent: PropTypes.func,
+    show: PropTypes.bool,
   };
   shouldComponentUpdate(nextProps) {
     return nextProps.show !== this.props.show;
