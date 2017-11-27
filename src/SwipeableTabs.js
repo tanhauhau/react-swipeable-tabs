@@ -5,11 +5,11 @@ import TabHeader from './TabHeader';
 import TabContent from './TabContent';
 import TabIndicator from './TabIndicator';
 import Tab from './Tab';
-
-const CACHE_RANGE = [-1, 1];
+import { onPassiveScroll } from './dom-utils';
 
 class SwipeableTabs extends React.Component {
   static propTypes = {
+    cacheRange: PropTypes.arrayOf(PropTypes.number),
     index: PropTypes.number.isRequired,
     onChangeIndex: PropTypes.func.isRequired,
     renderTabContent: PropTypes.func.isRequired,
@@ -31,6 +31,7 @@ class SwipeableTabs extends React.Component {
   };
 
   static defaultProps = {
+    cacheRange: [-1, 1],
     springConfig: {
       duration: '0.35s',
       easeFunction: 'cubic-bezier(0.15, 0.3, 0.25, 1)',
@@ -54,10 +55,54 @@ class SwipeableTabs extends React.Component {
   }
 
   _tabHeader = null;
+  _tabs = [];
+  _offPassiveScroll = null;
+  _scrollPosition = [];
 
   constructor(props) {
     super(props);
     this.onSwitching = this.onSwitching.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
+  }
+
+  componentDidMount() {
+    window._scrollPosition = this._scrollPosition;
+    this._offPassiveScroll = onPassiveScroll(window, this.handleScroll);
+  }
+  componentWillUnmount() {
+    if (typeof this._offPassiveScroll === 'function') {
+      this._offPassiveScroll();
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.index !== this.props.index) {
+      this.resetScroll(nextProps.index);
+    }
+  }
+
+  handleScroll(e) {
+    const scrollTop = window.scrollY;
+    for (let i = 0; i < this.props.tabs.length; i++) {
+      if (i !== this.props.index) {
+        this._tabs[i].translateY(scrollTop - (this._scrollPosition[i] || 0));
+      } else {
+        this._scrollPosition[i] = scrollTop;
+        this._tabs[i].updateMaxHeight(scrollTop);
+      }
+    }
+  }
+
+  resetScroll(index) {
+    requestAnimationFrame(() => {
+      for (let i = 0; i < this.props.tabs.length; i++) {
+        if (i !== index) {
+          this._tabs[i].translateY(-(this._scrollPosition[i] || 0));
+        } else {
+          this._tabs[i].translateY(0);
+        }
+      }
+      window.scrollTo(window.scrollX, this._scrollPosition[index] || 0);
+    });
   }
 
   onSwitching(index, mode) {
@@ -68,6 +113,7 @@ class SwipeableTabs extends React.Component {
   render() {
     const {
       mode,
+      cacheRange,
       index,
       onChangeIndex,
       tabs,
@@ -103,9 +149,10 @@ class SwipeableTabs extends React.Component {
           {tabs.map((tab, idx) => (
             <TabContent
               key={idx}
-              shouldLoad={idx >= index + CACHE_RANGE[0] && idx <= index + CACHE_RANGE[1]}
+              shouldLoad={idx >= index + cacheRange[0] && idx <= index + cacheRange[1]}
               isShown={idx === index}
               renderTabContent={() => renderTabContent(tab, idx)}
+              ref={ref => (this._tabs[idx] = ref)}
             />
           ))}
         </SwipeableViews>

@@ -19,6 +19,21 @@ export default class TabContent extends React.Component {
     shouldLoad: PropTypes.bool,
   };
   state = { show: false };
+  _ref = null;
+  // TODO initial max height, need to rethink this
+  maxHeight = WINDOW_HEIGHT;
+
+  translateY(val) {
+    if (this._ref) {
+      const transform = `translate(0, ${val}px)`;
+      this._ref.style.WebkitTransform = transform;
+      this._ref.style.transform = transform;
+    }
+  }
+  
+  updateMaxHeight(maxHeight) {
+    this.maxHeight = WINDOW_HEIGHT + maxHeight;
+  }
 
   componentWillMount() {
     this.setState({ show: this.props.shouldLoad });
@@ -40,7 +55,7 @@ export default class TabContent extends React.Component {
     if (!this.state.show) {
       return <div />;
     }
-    const style = this.props.isShown ? null : { maxHeight: WINDOW_HEIGHT, overflowY: 'hidden' };
-    return <div style={style}>{this.props.renderTabContent()}</div>;
+    const style = this.props.isShown ? null : { maxHeight: this.maxHeight, overflowY: 'hidden' };
+    return <div ref={ref => (this._ref = ref)} style={style}>{this.props.renderTabContent()}</div>;
   }
 }
