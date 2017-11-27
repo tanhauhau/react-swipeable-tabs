@@ -12,7 +12,7 @@ const styles = {
     zIndex: 10,
     overflowY: 'hidden',
     overflowX: 'scroll',
-    WebkitOverflowScroll: 'touch',
+    WebkitOverflowScrolling: 'touch',
   },
   tabList: {
     position: 'relative',

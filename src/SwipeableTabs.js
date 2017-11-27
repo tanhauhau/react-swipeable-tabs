@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SwipeableViews from './react-swipeable-views';
+import SwipeableViews from 'react-swipeable-views';
 import TabHeader from './TabHeader';
 import TabContent from './TabContent';
 import TabIndicator from './TabIndicator';
 import Tab from './Tab';
+
+const CACHE_RANGE = [-1, 1];
 
 class SwipeableTabs extends React.Component {
   static propTypes = {
@@ -101,7 +103,8 @@ class SwipeableTabs extends React.Component {
           {tabs.map((tab, idx) => (
             <TabContent
               key={idx}
-              show={idx >= index - 1 && idx <= index + 1}
+              shouldLoad={idx >= index + CACHE_RANGE[0] && idx <= index + CACHE_RANGE[1]}
+              isShown={idx === index}
               renderTabContent={() => renderTabContent(tab, idx)}
             />
           ))}

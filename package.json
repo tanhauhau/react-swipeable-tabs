@@ -17,8 +17,7 @@
     "dom-helpers": "^3.2.1",
     "prop-types": "^15.6.0",
     "react": "^16.1.1",
-    "react-swipeable-views-core": "^0.12.9",
-    "react-swipeable-views-utils": "^0.12.9",
+    "react-swipeable-views": "^0.12.12",
     "warning": "^3.0.0"
   },
   "devDependencies": {
@@ -45,6 +44,9 @@
     "prettier": "^1.8.2"
   },
   "nodemonConfig": {
-    "ignore": ["lib/*", "examples/*"]
+    "ignore": [
+      "lib/*",
+      "examples/*"
+    ]
   }
 }
