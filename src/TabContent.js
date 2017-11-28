@@ -36,15 +36,10 @@ export default class TabContent extends React.Component {
       this._ref.style.transform = transform;
     }
   }
-  
-  updateMaxHeight(maxHeight) {
-    // this.maxHeight = this.windowHeight + maxHeight;
-  }
 
   setMaxHeight(show) {
     if (this._ref) {
-      // requestAnimationFrame(() => {
-        console.log('maxheight', this.maxHeight);
+      requestAnimationFrame(() => {
         if (show) {
           this._ref.style.maxHeight = null;
           this._ref.style.overflowY = null;
@@ -52,18 +47,15 @@ export default class TabContent extends React.Component {
           this._ref.style.maxHeight = `${this.windowHeight}px`;
           this._ref.style.overflowY = 'hidden';
         }
-      // });
+      });
     }
   }
 
   setRef(ref) {
     this._ref = ref;
-    if (ref) {
+    if (ref) { // reset
       this.translateY(0);
-      this.setMaxHeight(true);
-    //   const { top } = ref.getBoundingClientRect();
-    //   this.windowHeight = WINDOW_HEIGHT - top;
-    //   // console.log('windowheight', WINDOW_HEIGHT, top)
+      this.setMaxHeight(this.props.isShown);
     }
   }
 

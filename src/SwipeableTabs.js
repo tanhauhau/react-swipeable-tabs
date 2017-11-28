@@ -81,6 +81,10 @@ class SwipeableTabs extends React.Component {
   }
 
   handleScroll(e) {
+    this.isAligned = false;
+    return;
+
+    // don't do translate Y on scroll
     if (this.ignoreScroll) {
       this.ignoreScroll = false;
       return;
@@ -97,7 +101,9 @@ class SwipeableTabs extends React.Component {
   }
 
   resetScroll(index) {
+    this._scrollPosition[this.props.index] = window.scrollY;
     requestAnimationFrame(() => {
+      // this._tabs[index].translateY(0);
       for (let i = 0; i < this.props.tabs.length; i++) {
         if (i !== index) {
           this._tabs[i].translateY(-(this._scrollPosition[i] || 0) + (this._scrollPosition[index] || 0));
@@ -105,7 +111,7 @@ class SwipeableTabs extends React.Component {
           this._tabs[i].translateY(0);
         }
       }
-      this.ignoreScroll = true;
+      // TODO how do you make sure you always able to scroll to that position
       window.scrollTo(window.scrollX, this._scrollPosition[index] || 0);
     });
   }
@@ -114,7 +120,18 @@ class SwipeableTabs extends React.Component {
     if (this._tabHeader) {
       this._tabHeader.syncGuide(index, mode);
     }
+    if (mode === 'move' && !this.isAligned) {
+      this.isAligned = true;
+      const scrollTop = window.scrollY;
+      
+      for (let i = 0; i < this.props.tabs.length; i++) {
+        if (i !== this.props.index) {
+          this._tabs[i].translateY(scrollTop - (this._scrollPosition[i] || 0));
+        }
+      }
+    }
   }
+
   render() {
     const {
       mode,
