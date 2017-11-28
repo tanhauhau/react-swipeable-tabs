@@ -53,7 +53,8 @@ export default class TabContent extends React.Component {
 
   setRef(ref) {
     this._ref = ref;
-    if (ref) { // reset
+    if (ref) {
+      // reset
       this.translateY(0);
       this.setMaxHeight(this.props.isShown);
     }
@@ -70,7 +71,7 @@ export default class TabContent extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.shouldLoad !== this.props.shouldLoad) {
+    if (nextProps.shouldLoad !== this.props.shouldLoad) {
       if (this.loadCallback) {
         cancelIdleCallback(this.loadCallback);
       }
@@ -82,11 +83,14 @@ export default class TabContent extends React.Component {
           this.loadCallback = requestIdleCallback(() => {
             this.setState({ show: nextProps.shouldLoad });
             this.loadCallback = null;
-          })
+          });
         }
       });
     }
-    if(nextProps.isShown !== this.props.isShown || nextProps.shouldLoad !== this.props.shouldLoad) {
+    if (
+      nextProps.isShown !== this.props.isShown ||
+      nextProps.shouldLoad !== this.props.shouldLoad
+    ) {
       this.setMaxHeight(nextProps.isShown);
     }
   }
@@ -96,11 +100,9 @@ export default class TabContent extends React.Component {
   }
 
   render() {
-    console.log('render        - ', this.props.idx);
     if (!this.state.show) {
       return <div />;
     }
-    console.log('render actual - ', this.props.idx);
     return <div ref={this.setRef}>{this.props.renderTabContent()}</div>;
   }
 }

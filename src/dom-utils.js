@@ -13,10 +13,10 @@ try {
   const opts = Object.defineProperty({}, 'passive', {
     get: function() {
       supportsPassive = true;
-    }
+    },
   });
-  window.addEventListener("testPassive", null, opts);
-  window.removeEventListener("testPassive", null, opts);
+  window.addEventListener('testPassive', null, opts);
+  window.removeEventListener('testPassive', null, opts);
 } catch (e) {}
 
 export function onPassiveScroll(node, callback) {
@@ -24,5 +24,5 @@ export function onPassiveScroll(node, callback) {
   node.addEventListener('scroll', callback, opts);
   return function offPassiveScroll() {
     node.removeEventListener('scroll', callback, opts);
-  }
+  };
 }

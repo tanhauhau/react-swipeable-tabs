@@ -106,7 +106,9 @@ class SwipeableTabs extends React.Component {
       // this._tabs[index].translateY(0);
       for (let i = 0; i < this.props.tabs.length; i++) {
         if (i !== index) {
-          this._tabs[i].translateY(-(this._scrollPosition[i] || 0) + (this._scrollPosition[index] || 0));
+          this._tabs[i].translateY(
+            -(this._scrollPosition[i] || 0) + (this._scrollPosition[index] || 0),
+          );
         } else {
           this._tabs[i].translateY(0);
         }
@@ -123,7 +125,7 @@ class SwipeableTabs extends React.Component {
     if (mode === 'move' && !this.isAligned) {
       this.isAligned = true;
       const scrollTop = window.scrollY;
-      
+
       for (let i = 0; i < this.props.tabs.length; i++) {
         if (i !== this.props.index) {
           this._tabs[i].translateY(scrollTop - (this._scrollPosition[i] || 0));

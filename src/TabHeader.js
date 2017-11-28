@@ -167,9 +167,36 @@ class TabHeader extends React.Component {
     this.syncGuide(this.props.index, 'end');
   }
 
+  shouldComponentUpdate(nextProps) {
+    warning(
+      nextProps.TabComponent === this.props.TabComponent,
+      'react-swipeable-tabs: will not rerender tab header when `TabComponent` change',
+    );
+    warning(
+      nextProps.tabBackground === this.props.tabBackground,
+      'react-swipeable-tabs: will not rerender tab header when `tabBackground` change',
+    );
+    warning(
+      nextProps.tabHeight === this.props.tabHeight,
+      'react-swipeable-tabs: will not rerender tab header when `tabHeight` change',
+    );
+    warning(
+      nextProps.tabIndicatorComponent === this.props.tabIndicatorComponent,
+      'react-swipeable-tabs: will not rerender tab header when `tabIndicatorComponent` change',
+    );
+    warning(
+      nextProps.tabIndicatorStyle === this.props.tabIndicatorStyle,
+      'react-swipeable-tabs: will not rerender tab header when `tabIndicatorStyle` change',
+    );
+    warning(
+      nextProps.onChangeIndex === this.props.onChangeIndex,
+      'react-swipeable-tabs: will not rerender tab header when `onChangeIndex` change',
+    );
+    return nextProps.tabs.length !== this.props.tabs.length;
+  }
+
   render() {
     const {
-      index,
       onChangeIndex,
       tabs,
       tabBackground,
