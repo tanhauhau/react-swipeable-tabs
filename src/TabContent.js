@@ -40,13 +40,13 @@ export default class TabContent extends React.Component {
   setMaxHeight(show) {
     if (this._ref) {
       requestAnimationFrame(() => {
-        if (show) {
-          this._ref.style.maxHeight = null;
-          this._ref.style.overflowY = null;
-        } else {
-          this._ref.style.maxHeight = `${this.windowHeight}px`;
-          this._ref.style.overflowY = 'hidden';
-        }
+        // if (show) {
+        //   this._ref.style.maxHeight = null;
+        //   this._ref.style.overflowY = null;
+        // } else {
+        //   this._ref.style.maxHeight = `${this.windowHeight}px`;
+        //   this._ref.style.overflowY = 'hidden';
+        // }
       });
     }
   }
@@ -71,9 +71,20 @@ export default class TabContent extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.shouldLoad !== this.props.shouldLoad) {
-      setTimeout(() => {
-        this.setState({ show: nextProps.shouldLoad })
-      }, 1000);
+      if (this.loadCallback) {
+        cancelIdleCallback(this.loadCallback);
+      }
+      this.loadCallback = requestIdleCallback(() => {
+        if (this.props.isShown) {
+          this.setState({ show: nextProps.shouldLoad });
+          this.loadCallback = null;
+        } else {
+          this.loadCallback = requestIdleCallback(() => {
+            this.setState({ show: nextProps.shouldLoad });
+            this.loadCallback = null;
+          })
+        }
+      });
     }
     if(nextProps.isShown !== this.props.isShown || nextProps.shouldLoad !== this.props.shouldLoad) {
       this.setMaxHeight(nextProps.isShown);
@@ -85,9 +96,11 @@ export default class TabContent extends React.Component {
   }
 
   render() {
+    console.log('render        - ', this.props.idx);
     if (!this.state.show) {
       return <div />;
     }
+    console.log('render actual - ', this.props.idx);
     return <div ref={this.setRef}>{this.props.renderTabContent()}</div>;
   }
 }

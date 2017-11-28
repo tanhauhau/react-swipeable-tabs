@@ -171,6 +171,7 @@ class SwipeableTabs extends React.Component {
           {tabs.map((tab, idx) => (
             <TabContent
               key={idx}
+              idx={tabs[idx].name}
               shouldLoad={idx >= index + cacheRange[0] && idx <= index + cacheRange[1]}
               isShown={idx === index}
               renderTabContent={() => renderTabContent(tab, idx)}
