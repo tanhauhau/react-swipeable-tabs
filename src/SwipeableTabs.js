@@ -81,6 +81,10 @@ class SwipeableTabs extends React.Component {
   }
 
   handleScroll(e) {
+    if (this.ignoreScroll) {
+      this.ignoreScroll = false;
+      return;
+    }
     const scrollTop = window.scrollY;
     for (let i = 0; i < this.props.tabs.length; i++) {
       if (i !== this.props.index) {
@@ -96,11 +100,12 @@ class SwipeableTabs extends React.Component {
     requestAnimationFrame(() => {
       for (let i = 0; i < this.props.tabs.length; i++) {
         if (i !== index) {
-          this._tabs[i].translateY(-(this._scrollPosition[i] || 0));
+          this._tabs[i].translateY(-(this._scrollPosition[i] || 0) + (this._scrollPosition[index] || 0));
         } else {
           this._tabs[i].translateY(0);
         }
       }
+      this.ignoreScroll = true;
       window.scrollTo(window.scrollX, this._scrollPosition[index] || 0);
     });
   }

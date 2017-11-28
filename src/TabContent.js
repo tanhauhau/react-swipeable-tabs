@@ -21,7 +21,13 @@ export default class TabContent extends React.Component {
   state = { show: false };
   _ref = null;
   // TODO initial max height, need to rethink this
-  maxHeight = WINDOW_HEIGHT;
+  windowHeight = WINDOW_HEIGHT;
+  maxHeight = this.windowHeight;
+
+  constructor(props) {
+    super(props);
+    this.setRef = this.setRef.bind(this);
+  }
 
   translateY(val) {
     if (this._ref) {
@@ -32,11 +38,42 @@ export default class TabContent extends React.Component {
   }
   
   updateMaxHeight(maxHeight) {
-    this.maxHeight = WINDOW_HEIGHT + maxHeight;
+    // this.maxHeight = this.windowHeight + maxHeight;
+  }
+
+  setMaxHeight(show) {
+    if (this._ref) {
+      requestAnimationFrame(() => {
+        console.log('maxheight', this.maxHeight);
+        if (show) {
+          this._ref.style.maxHeight = null;
+          this._ref.style.overflowY = null;
+        } else {
+          this._ref.style.maxHeight = `${this.windowHeight}px`;
+          this._ref.style.overflowY = 'hidden';
+        }
+      });
+    }
+  }
+
+  setRef(ref) {
+    this._ref = ref;
+    if (ref) {
+      this.translateY(0);
+    //   const { top } = ref.getBoundingClientRect();
+    //   this.windowHeight = WINDOW_HEIGHT - top;
+    //   // console.log('windowheight', WINDOW_HEIGHT, top)
+    }
   }
 
   componentWillMount() {
     this.setState({ show: this.props.shouldLoad });
+  }
+
+  componentDidMount() {
+    if (this.props.shouldLoad && !this.props.isShown) {
+      this.setMaxHeight(false);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,17 +82,19 @@ export default class TabContent extends React.Component {
         this.setState({ show: nextProps.shouldLoad })
       }, 1000);
     }
+    if(nextProps.isShown !== this.props.isShown || nextProps.shouldLoad !== this.props.shouldLoad) {
+      this.setMaxHeight(nextProps.isShown);
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.props.isShown !== nextProps.isShown || this.state.show !== nextState.show;
+    return this.state.show !== nextState.show;
   }
 
   render() {
     if (!this.state.show) {
       return <div />;
     }
-    const style = this.props.isShown ? null : { maxHeight: this.maxHeight, overflowY: 'hidden' };
-    return <div ref={ref => (this._ref = ref)} style={style}>{this.props.renderTabContent()}</div>;
+    return <div ref={this.setRef}>{this.props.renderTabContent()}</div>;
   }
 }
