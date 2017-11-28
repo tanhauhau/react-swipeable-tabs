@@ -40,13 +40,13 @@ export default class TabContent extends React.Component {
   setMaxHeight(show) {
     if (this._ref) {
       requestAnimationFrame(() => {
-        // if (show) {
-        //   this._ref.style.maxHeight = null;
-        //   this._ref.style.overflowY = null;
-        // } else {
-        //   this._ref.style.maxHeight = `${this.windowHeight}px`;
-        //   this._ref.style.overflowY = 'hidden';
-        // }
+        if (show) {
+          this._ref.style.maxHeight = null;
+          this._ref.style.overflowY = null;
+        } else {
+          this._ref.style.maxHeight = `${this.windowHeight}px`;
+          this._ref.style.overflowY = 'hidden';
+        }
       });
     }
   }
