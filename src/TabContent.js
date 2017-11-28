@@ -38,16 +38,18 @@ export default class TabContent extends React.Component {
     }
   }
 
-  setMaxHeight(show) {
-    if (this._ref) {
+  isHeightClamped = null;
+  clampHeight(toClamp) {
+    if (this._ref && this.isHeightClamped !== toClamp) {
       requestAnimationFrame(() => {
-        if (show) {
+        if (!toClamp) {
           this._ref.style.maxHeight = null;
           this._ref.style.overflowY = null;
         } else {
           this._ref.style.maxHeight = `${this.windowHeight}px`;
           this._ref.style.overflowY = 'hidden';
         }
+        this.isHeightClamped = toClamp;
       });
     }
   }
@@ -57,7 +59,7 @@ export default class TabContent extends React.Component {
     if (ref) {
       // reset
       this.translateY(0);
-      this.setMaxHeight(this.props.isShown);
+      this.clampHeight(!this.props.isShown);
     }
   }
 
@@ -67,7 +69,7 @@ export default class TabContent extends React.Component {
 
   componentDidMount() {
     if (this.props.shouldLoad && this.props.isShown) {
-      this.setMaxHeight(true);
+      this.clampHeight(false);
     }
   }
 
@@ -87,12 +89,6 @@ export default class TabContent extends React.Component {
           });
         }
       });
-    }
-    if (
-      nextProps.isShown !== this.props.isShown ||
-      nextProps.shouldLoad !== this.props.shouldLoad
-    ) {
-      this.setMaxHeight(nextProps.isShown);
     }
   }
 

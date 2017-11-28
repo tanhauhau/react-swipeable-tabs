@@ -25,10 +25,8 @@ export default class Tab extends React.Component {
     if (!this._ref || typeof this.sync !== 'function') {
       return;
     }
-    requestAnimationFrame(() => {
-      this._updateTransition(mode === 'move' ? 'all 0s ease 0s' : this.context.snapTransition);
-      this.sync(this._ref, t, mode);
-    });
+    this._updateTransition(mode === 'move' ? 'all 0s ease 0s' : this.context.snapTransition);
+    this.sync(this._ref, t, mode);
   }
   setRef(ref) {
     this._ref = ref;

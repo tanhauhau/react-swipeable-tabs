@@ -83,27 +83,13 @@ class SwipeableTabs extends React.Component {
   handleScroll(e) {
     this.isAligned = false;
     return;
-
-    // don't do translate Y on scroll
-    if (this.ignoreScroll) {
-      this.ignoreScroll = false;
-      return;
-    }
-    const scrollTop = window.scrollY;
-    for (let i = 0; i < this.props.tabs.length; i++) {
-      if (i !== this.props.index) {
-        this._tabs[i].translateY(scrollTop - (this._scrollPosition[i] || 0));
-      } else {
-        this._scrollPosition[i] = scrollTop;
-        this._tabs[i].updateMaxHeight(scrollTop);
-      }
-    }
   }
 
   resetScroll(index) {
-    this._scrollPosition[this.props.index] = window.scrollY;
+    const prevIndex = this.props.index;
     requestAnimationFrame(() => {
-      // this._tabs[index].translateY(0);
+      const { scrollY, scrollX } = window;
+      this._scrollPosition[prevIndex] = scrollY;
       for (let i = 0; i < this.props.tabs.length; i++) {
         if (i !== index) {
           this._tabs[i].translateY(
@@ -114,22 +100,53 @@ class SwipeableTabs extends React.Component {
         }
       }
       // TODO how do you make sure you always able to scroll to that position
-      window.scrollTo(window.scrollX, this._scrollPosition[index] || 0);
+      window.scrollTo(scrollX, this._scrollPosition[index] || 0);
     });
   }
 
   onSwitching(index, mode) {
-    if (this._tabHeader) {
-      this._tabHeader.syncGuide(index, mode);
-    }
-    if (mode === 'move' && !this.isAligned) {
-      this.isAligned = true;
-      const scrollTop = window.scrollY;
+    requestAnimationFrame(() => {
+      if (this._tabHeader) {
+        this._tabHeader.syncGuide(index, mode);
+      }
+      if (mode === 'move' && !this.isAligned) {
+        this.isAligned = true;
+        const scrollTop = window.scrollY;
 
-      for (let i = 0; i < this.props.tabs.length; i++) {
-        if (i !== this.props.index) {
-          this._tabs[i].translateY(scrollTop - (this._scrollPosition[i] || 0));
+        for (let i = 0; i < this._tabs.length; i++) {
+          if (i !== this.props.index) {
+            this._tabs[i].translateY(scrollTop - (this._scrollPosition[i] || 0));
+          }
         }
+      }
+      if (mode === 'move') {
+        this.unclampHeight(index);
+      } else {
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            this.clampHeightExcept(index);
+          })
+        // parseFloat will auto ignore the 's'
+        }, parseFloat(this.props.springConfig.duration));
+      }
+    });
+  }
+
+  unclampHeight(index) {
+    const tab1 = this._tabs[Math.ceil(index)];
+    const tab2 = this._tabs[Math.floor(index)];
+    if (tab1 && typeof tab1.clampHeight === 'function') {
+      tab1.clampHeight(false);
+    }
+    if (tab2 && typeof tab2.clampHeight === 'function') {
+      tab2.clampHeight(false);
+    }
+  }
+
+  clampHeightExcept(index) {
+    for (let i = 0; i < this._tabs.length; i++) {
+      if (i !== index) {
+        this._tabs[i].clampHeight(true);
       }
     }
   }
