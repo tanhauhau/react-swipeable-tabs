@@ -26,3 +26,19 @@ export function onPassiveScroll(node, callback) {
     node.removeEventListener('scroll', callback, opts);
   };
 }
+
+export function requestIdleCallback(callback) {
+  if ('requestIdleCallback' in window) {
+    return window.requestIdleCallback(callback);
+  } else {
+    return setTimeout(callback, 1);
+  }
+}
+
+export function cancelIdleCallback(id) {
+  if ('requestIdleCallback' in window) {
+    return window.cancelIdleCallback(id);
+  } else {
+    return clearTimeout(id);
+  }
+}

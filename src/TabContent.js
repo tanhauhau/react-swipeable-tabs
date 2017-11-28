@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { cancelIdleCallback, requestIdleCallback } from './dom-utils';
 
 const WINDOW_HEIGHT = window.innerHeight;
 
